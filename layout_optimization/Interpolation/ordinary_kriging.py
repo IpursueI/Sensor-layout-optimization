@@ -38,14 +38,14 @@ class OrdinaryKriging:
         self.pos_data = read_data.get_pos_data()
 
         calculate_data = []
-        for item in selected_sensors:
+        for item in self.selected_sensors:
             row_data = []
             for sensor_info in self.temperature_humidity_data[item]:
                 row_data.append(list(self.pos_data[item]) + list(sensor_info))
             calculate_data.append(row_data)
 
         calculate_pos = []
-        for item in unselected_sensors:
+        for item in self.unselected_sensors:
             calculate_pos.append(list(self.pos_data[item]))
 
         return calculate_data,calculate_pos
@@ -83,8 +83,8 @@ class OrdinaryKriging:
             hum_var += (original_hum-k3d_hum[idx])*(original_hum-k3d_hum[idx])
             final_data.append(row_data)
         
-        print final_data
-        return temp_var/len(self.unselected_sensors),hum_var/len(self.unselected_sensors)
+        return final_data
+        #return temp_var/len(self.unselected_sensors),hum_var/len(self.unselected_sensors)
 
 
     def calculate(self, calculate_data, calculate_pos):
@@ -110,6 +110,7 @@ class OrdinaryKriging:
 
         min_calculate_data_len = min([len(item) for item in calculate_data])
 
+        final_result = []
         for index in range(min_calculate_data_len):
             each_row = []
             for col_item in calculate_data:
@@ -117,14 +118,16 @@ class OrdinaryKriging:
 
             final_data = numpy.array(each_row)
 
-            self.do_interpolate(final_data, grid_x, grid_y, grid_z, index)
+            final_result.append(self.do_interpolate(final_data, grid_x, grid_y, grid_z, index))
+
+        return final_result
 
     def run(self):
         calculate_data,calculate_pos = self.get_calculate_data()
-        self.calculate(calculate_data, calculate_pos)
+        return self.calculate(calculate_data, calculate_pos)
 
 if __name__ == '__main__':
     pick = PickTactics()
     selected_sensors,unselected_sensors = pick.random_tactic(10)
     ok3d = OrdinaryKriging("../data/filter_data","../data/pos/pos.csv",selected_sensors,unselected_sensors,2)
-    ok3d.run()
+    print ok3d.run()
