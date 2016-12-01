@@ -15,25 +15,36 @@ class LayoutOptimization(Annealer):
     """模拟退火对传感器布局进行优化
     """
     
-    def __init__(self, choice, sensors, total_number, selected_number):
-        self.sensors = sensors
+    def __init__(self, state, total_number,filtered_file_path, pos_file_path, each_sensor_number):
         self.total_number = total_number
-        self.selected_number = selected_number
-        super(LayoutOptimization, self).__init__(choice)  # important! 
+        self.filtered_file_path = filtered_file_path
+        self.each_sensor_number = each_sensor_number
+        self.pos_file_path = pos_file_path
+        super(LayoutOptimization, self).__init__(state)  # important! 
 
     def move(self):
-        a = random.choice(self.choice)
-        unselected = list(set(range(self.total_number)).difference(set(choice)))
+        a = random.choice(self.state)
+        unselected = list(set(range(self.total_number)).difference(set(self.state)))
         b = random.choice(unselected)
-        self.choice.remove(a)
-        self.choice.append(b)
+        self.state.remove(a)
+        self.state.append(b)
+        #print("state: ",self.state)
 
     def energy(self):
-        e = 0
-        for i in range(len(self.state)):
-            e += self.distance_matrix[self.state[i-1]][self.state[i]]
-        return e
+        tac = PickTactics()
+        selected_sensors,unselected_sensors = tac.fixed_tactic(self.state)
+        ok3d = OrdinaryKriging(self.filtered_file_path, self.pos_file_path, selected_sensors,unselected_sensors, self.each_sensor_number)
+        rmse = RMSE(ok3d.run())
+        return rmse.temperature_error()
 
 
 if __name__ == '__main__':
-    print "aa"
+    #state = random.sample(range(34), 6)
+    state = [1,2,3,4,5,6]
+    lay_opt = LayoutOptimization(state, 34, "../data/filter_data","../data/pos/pos.csv", 2)
+    lay_opt.copy_strategy = "slice"
+    state, e = lay_opt.anneal()
+    print("%i root_mean_square_error:" % e)
+    for item in state:
+        print("\t", item)
+    print("-----end-----")
