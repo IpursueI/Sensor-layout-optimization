@@ -34,7 +34,7 @@ class RMSE:
 
 if __name__ == '__main__':
     tac = PickTactics()
-    selected_sensors,unselected_sensors = tac.fixed_tactic([0,1,2])
+    selected_sensors,unselected_sensors = tac.fixed_tactic([31, 32, 12, 7, 3, 11])
     ok3d = OrdinaryKriging("../data/filter_data","../data/pos/pos.csv",selected_sensors,unselected_sensors, 2)
     rmse = RMSE(ok3d.run())
     print rmse.temperature_error()

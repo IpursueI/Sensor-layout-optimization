@@ -1,6 +1,6 @@
 #-*- coding:utf-8 -*-
 
-#from __future__ import print_function
+from __future__ import print_function
 import math
 import random
 from simanneal import Annealer
@@ -35,6 +35,7 @@ class LayoutOptimization(Annealer):
         selected_sensors,unselected_sensors = tac.fixed_tactic(self.state)
         ok3d = OrdinaryKriging(self.filtered_file_path, self.pos_file_path, selected_sensors,unselected_sensors, self.each_sensor_number)
         rmse = RMSE(ok3d.run())
+        #print(self.state)
         return rmse.temperature_error()
 
 
@@ -43,8 +44,9 @@ if __name__ == '__main__':
     state = [1,2,3,4,5,6]
     lay_opt = LayoutOptimization(state, 34, "../data/filter_data","../data/pos/pos.csv", 2)
     lay_opt.copy_strategy = "slice"
+    lay_opt.steps = 300
+    lay_opt.updates = 300
     state, e = lay_opt.anneal()
-    print("%i root_mean_square_error:" % e)
-    for item in state:
-        print("\t", item)
+    print("root_mean_square_error: %f" % e)
+    print("final state: ", state)
     print("-----end-----")
