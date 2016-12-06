@@ -5,12 +5,12 @@ sys.path.append("..")
 import numpy
 import csv
 from pick_tactics.tactics import PickTactics
-from pykrige.ok3d import OrdinaryKriging3D
+from pykrige.uk3d import UniversalKriging3D
 from file_input_output.read_data import ReadData
 
-__doc__ = '''用于普通kriging的计算'''
+__doc__ = '''用于泛kriging的计算'''
 
-class OrdinaryKriging:
+class UniversalKriging:
 
     def __init__(self, filtered_file_path, pos_file_path, selected_sensors, unselected_sensors, each_sensor_number, variogram_model='spherical'):
         self.filtered_file_path = filtered_file_path
@@ -54,14 +54,14 @@ class OrdinaryKriging:
 
     def do_interpolate(self, data, grid_x, grid_y, grid_z, row_idx):
         #对温度进行插值
-        ok3d_temp = OrdinaryKriging3D(data[:, 0], data[:, 1], data[:, 2], data[:, 3],variogram_model=self.variogram_model)
+        uk3d_temp = UniversalKriging3D(data[:, 0], data[:, 1], data[:, 2], data[:, 3],variogram_model=self.variogram_model)
         #print data[:,1]
         #print gridx
-        k3d_temp, ss3d_temp = ok3d_temp.execute('points', grid_x, grid_y, grid_z)
+        k3d_temp, ss3d_temp = uk3d_temp.execute('points', grid_x, grid_y, grid_z)
         
         #对湿度进行差值
-        ok3d_hum = OrdinaryKriging3D(data[:, 0], data[:, 1], data[:, 2], data[:, 4],variogram_model=self.variogram_model)
-        k3d_hum, ss3d_hum = ok3d_hum.execute('points', grid_x, grid_y, grid_z)
+        uk3d_hum = UniversalKriging3D(data[:, 0], data[:, 1], data[:, 2], data[:, 4],variogram_model=self.variogram_model)
+        k3d_hum, ss3d_hum = uk3d_hum.execute('points', grid_x, grid_y, grid_z)
         
         #最后保存的数据，包括传感器编号，对应的x，y，z坐标，原始值，差值测量值
         final_data = []
@@ -131,5 +131,5 @@ class OrdinaryKriging:
 if __name__ == '__main__':
     pick = PickTactics()
     selected_sensors,unselected_sensors = pick.random_tactic(10)
-    ok3d = OrdinaryKriging("../data/filter_data","../data/pos/pos.csv",selected_sensors,unselected_sensors,2)
-    print ok3d.run()
+    uk3d = UniversalKriging("../data/filter_data","../data/pos/pos.csv",selected_sensors,unselected_sensors,2)
+    print uk3d.run()
