@@ -87,7 +87,7 @@ class OrdinaryKriging:
         #return temp_var/len(self.unselected_sensors),hum_var/len(self.unselected_sensors)
 
 
-    def calculate(self, calculate_data, calculate_pos):
+    def calculate(self):
         """
         each_row 格式：
         [[[x1,y1,z1,'14.649','20.323'], [[x2,y2,z2,'14.385','20.408']]]
@@ -123,8 +123,9 @@ class OrdinaryKriging:
         return final_result
 
     def run(self):
-        calculate_data,calculate_pos = self.get_calculate_data()
-        return self.calculate(calculate_data, calculate_pos)
+        #calculate_data,calculate_pos = self.get_calculate_data()
+        #return self.calculate(calculate_data, calculate_pos)
+        return self.calculate()
 
 if __name__ == '__main__':
     pick = PickTactics()

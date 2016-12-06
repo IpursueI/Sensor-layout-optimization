@@ -5,9 +5,10 @@ import sys
 import csv
 
 class ReadData:
-    def __init__(self, filtered_file_path, pos_file_path):
+    def __init__(self, filtered_file_path, pos_file_path, dis_file_path=""):
         self.filtered_file_path = filtered_file_path
         self.pos_file_path = pos_file_path
+        self.dis_file_path = dis_file_path
 
     def get_file_names(self):
         file_list = os.listdir(self.filtered_file_path)
@@ -20,6 +21,19 @@ class ReadData:
             for row in f_csv:
                 pos_data[row[0]] = (row[1], row[2],row[3])
             return pos_data
+
+    def get_dis_data(self):
+        dis_data = {}
+        with open(self.dis_file_path) as f:
+            f_csv = csv.reader(f)
+            for row in f_csv:
+                if dis_data.has_key(row[0]):
+                    dis_data[row[0]][row[1]] = row[2]
+                else:
+                    value = {}
+                    value[row[1]] = row[2]
+                    dis_data[row[0]] = value
+            return dis_data
 
     def get_temperature_humidity_data(self, number):
         temperature_humidity_data = {}
