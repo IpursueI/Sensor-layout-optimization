@@ -130,6 +130,7 @@ class OrdinaryKriging:
 
 if __name__ == '__main__':
     pick = PickTactics()
-    selected_sensors,unselected_sensors = pick.random_tactic(10)
+    #selected_sensors,unselected_sensors = pick.random_tactic(10)
+    selected_sensors,unselected_sensors = pick.fixed_tactic([1,5,10,15,25])
     ok3d = OrdinaryKriging("../data/filter_data","../data/pos/pos.csv",selected_sensors,unselected_sensors,2)
     print ok3d.run()
