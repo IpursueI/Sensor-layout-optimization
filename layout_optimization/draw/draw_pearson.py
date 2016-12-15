@@ -75,5 +75,5 @@ class DrawPearson:
 
 if __name__ == '__main__':
     draw_pearson = DrawPearson("../data/result/Pearson.csv")
-    #draw_pearson.draw(0)
     draw_pearson.draw(1)
+    #draw_pearson.draw(1)

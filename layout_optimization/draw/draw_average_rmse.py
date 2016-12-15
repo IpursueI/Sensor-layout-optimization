@@ -72,5 +72,5 @@ class DrawAverageRMSE:
 
 if __name__ == '__main__':
     draw_average_rmse = DrawAverageRMSE("../data/result/RMSE.csv")
-    draw_average_rmse.draw(0)
     draw_average_rmse.draw(1)
+    #draw_average_rmse.draw(1)

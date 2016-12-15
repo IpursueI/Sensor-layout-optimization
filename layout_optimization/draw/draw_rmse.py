@@ -75,5 +75,5 @@ class DrawRMSE:
 
 if __name__ == '__main__':
     draw_rmse = DrawRMSE("../data/result/RMSE.csv")
-    draw_rmse.draw(0)
     draw_rmse.draw(1)
+    #draw_rmse.draw(1)

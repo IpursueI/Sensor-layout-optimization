@@ -72,5 +72,5 @@ class DrawAveragePearson:
 
 if __name__ == '__main__':
     draw_average_pearson = DrawAveragePearson("../data/result/Pearson.csv")
-    draw_average_pearson.draw(0)
     draw_average_pearson.draw(1)
+    #draw_average_pearson.draw(1)

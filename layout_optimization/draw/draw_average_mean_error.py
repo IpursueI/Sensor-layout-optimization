@@ -72,5 +72,5 @@ class DrawAverageMeanError:
 
 if __name__ == '__main__':
     draw_average_mean_error = DrawAverageMeanError("../data/result/MeanError.csv")
-    draw_average_mean_error.draw(0)
     draw_average_mean_error.draw(1)
+    #draw_average_mean_error.draw(1)
