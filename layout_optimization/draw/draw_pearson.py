@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import csv
 
 class DrawPearson:
@@ -29,7 +30,8 @@ class DrawPearson:
 
 
     def draw(self, temp_hum):
-        title = ['Temperature interpolation Pearson cross_validation','humidity interpolation Pearson cross_validation']
+        #title = ['Temperature interpolation Pearson cross_validation','humidity interpolation Pearson cross_validation']
+        title = [u'温度pearson相关系数',u'湿度pearson相关系数']
 
         majors = [['idw_temp','kriging_spherical_temp','kriging_linear_temp',
                     'kriging_power_temp','kriging_exponential_temp'],
@@ -43,7 +45,7 @@ class DrawPearson:
 
         file_data = self.get_data(temp_hum)
         color_sequence = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c']
-
+        plt.style.use('ggplot')
         fig, ax = plt.subplots(1, 1, figsize=(12, 14))
 
         ax.spines['top'].set_visible(False)
@@ -53,6 +55,11 @@ class DrawPearson:
 
         ax.get_xaxis().tick_bottom()
         ax.get_yaxis().tick_left()
+
+        
+        zhfont = mpl.font_manager.FontProperties(fname='C:/Windows/Fonts/simhei.ttf')
+        plt.xlabel(u'交叉验证实验编号', fontproperties = zhfont, fontsize = 15)
+        plt.ylabel(u'pearson相关系数', fontproperties = zhfont, fontsize = 15)
 
         plt.xlim(0,7.3)
         plt.ylim(-2, 2)
@@ -68,9 +75,13 @@ class DrawPearson:
 
             plt.text(6.2, y_pos, majors[temp_hum][rank], fontsize=14, color=color_sequence[rank])
 
-        plt.title(title[temp_hum], fontsize=18, ha='center')
-
-        plt.show()
+        #plt.title(title[temp_hum], fontsize=18, ha='center')
+        plt.title(title[temp_hum], fontproperties = zhfont, fontsize = 15)
+        #plt.show()
+        if temp_hum == 0:
+            plt.savefig(u'../data/result/温度pearson相关系数图.png')
+        else:
+            plt.savefig(u'../data/result/湿度pearson相关系数图.png')
 
 
 if __name__ == '__main__':

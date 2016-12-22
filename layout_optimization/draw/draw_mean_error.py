@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import csv
 
 class DrawMeanError:
@@ -29,7 +30,8 @@ class DrawMeanError:
 
 
     def draw(self, temp_hum):
-        title = ['Temperature interpolation MeanError cross_validation','humidity interpolation MeanError cross_validation']
+        #title = ['Temperature interpolation MeanError cross_validation','humidity interpolation MeanError cross_validation']
+        title = [u'温度插值平均误差',u'湿度插值平均误差']
 
         majors = [['idw_temp','kriging_spherical_temp','kriging_linear_temp',
                     'kriging_power_temp','kriging_exponential_temp'],
@@ -43,7 +45,7 @@ class DrawMeanError:
 
         file_data = self.get_data(temp_hum)
         color_sequence = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c']
-
+        plt.style.use('ggplot')
         fig, ax = plt.subplots(1, 1, figsize=(12, 14))
 
         ax.spines['top'].set_visible(False)
@@ -53,6 +55,11 @@ class DrawMeanError:
 
         ax.get_xaxis().tick_bottom()
         ax.get_yaxis().tick_left()
+
+        
+        zhfont = mpl.font_manager.FontProperties(fname='C:/Windows/Fonts/simhei.ttf')
+        plt.xlabel(u'交叉验证实验编号', fontproperties = zhfont, fontsize = 15)
+        plt.ylabel(u'平均误差', fontproperties = zhfont, fontsize = 15)
 
         plt.xlim(0,7.3)
         plt.ylim(-3, 2)
@@ -70,11 +77,16 @@ class DrawMeanError:
 
         plt.plot(range(7), [0] * 7, '--',lw=1.5, color='black', alpha=0.3)
 
-        plt.title(title[temp_hum], fontsize=18, ha='center')
+        #plt.title(title[temp_hum], fontsize=18, ha='center')
+        plt.title(title[temp_hum], fontproperties = zhfont, fontsize = 15)
 
-        plt.show()
+        #plt.show()
+        if temp_hum == 0:
+            plt.savefig(u'../data/result/温度平均误差图.png')
+        else:
+            plt.savefig(u'../data/result/湿度平均误差图.png')
 
 
 if __name__ == '__main__':
     draw_mean_error = DrawMeanError("../data/result/MeanError.csv")
-    draw_mean_error.draw(1)
+    draw_mean_error.draw(0)

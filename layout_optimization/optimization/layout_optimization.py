@@ -41,15 +41,16 @@ class LayoutOptimization(Annealer):
         ok3d = OrdinaryKriging(self.filtered_file_path, self.pos_file_path, selected_sensors,unselected_sensors, self.each_sensor_number, 'linear')
         rmse = RMSE(ok3d.run())
         #print(self.state)
-        return rmse.temperature_error()
+        #return rmse.temperature_error()
+        return rmse.humidity_error()
 
 
 if __name__ == '__main__':
     #state = random.sample(range(34), 6)
-    state = [1,2,3,4,5,6]
+    state = [1,2,3,4,5]
     lay_opt = LayoutOptimization(state, 34, "../data/filter_data","../data/pos/pos.csv", 10)
     lay_opt.copy_strategy = "slice"
-    lay_opt.steps = 1000
+    lay_opt.steps = 10000
     lay_opt.updates = 1000
     state, e = lay_opt.anneal()
     state = sorted(state)

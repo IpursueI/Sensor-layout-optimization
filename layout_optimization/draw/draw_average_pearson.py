@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import csv
 
 class DrawAveragePearson:
@@ -23,7 +24,8 @@ class DrawAveragePearson:
 
 
     def draw(self, temp_hum):
-        title = ['Temperature interpolation average pearson cross_validation','humidity interpolation average pearson cross_validation']
+        #title = ['Temperature interpolation average pearson cross_validation','humidity interpolation average pearson cross_validation']
+        title = [u'温度pearson相关系数均值',u'湿度pearson相关系数均值']
 
         majors = [['idw_temp','kriging_spherical_temp','kriging_linear_temp',
                     'kriging_power_temp','kriging_exponential_temp'],
@@ -38,7 +40,7 @@ class DrawAveragePearson:
         file_data = self.get_data(temp_hum)
         print file_data
         color_sequence = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c']
-
+        plt.style.use('ggplot')
         fig, ax = plt.subplots(1, 1, figsize=(12, 14))
 
         ax.spines['top'].set_visible(False)
@@ -48,6 +50,11 @@ class DrawAveragePearson:
 
         ax.get_xaxis().tick_bottom()
         ax.get_yaxis().tick_left()
+
+        
+        zhfont = mpl.font_manager.FontProperties(fname='C:/Windows/Fonts/simhei.ttf')
+        plt.xlabel(u'插值方法或者模型类型', fontproperties = zhfont, fontsize = 15)
+        plt.ylabel(u'pearson相关系数均值', fontproperties = zhfont, fontsize = 15)
 
         ax.set_xticks(range(5))
         ax.set_xticklabels(majors[temp_hum])
@@ -65,9 +72,14 @@ class DrawAveragePearson:
 
         #plt.text(5.2, y_pos, "average RMSE", fontsize=14, color=color_sequence[0])
 
-        plt.title(title[temp_hum], fontsize=18, ha='center')
+        #plt.title(title[temp_hum], fontsize=18, ha='center')
+        plt.title(title[temp_hum], fontproperties = zhfont, fontsize = 15)
 
-        plt.show()
+        #plt.show()
+        if temp_hum == 0:
+            plt.savefig(u'../data/result/温度pearson相关系数均值图.png')
+        else:
+            plt.savefig(u'../data/result/湿度pearson相关系数均值图.png')
 
 
 if __name__ == '__main__':

@@ -36,6 +36,9 @@ class CrossValidation:
                     start += 1
             class_list.append(tmp)
 
+        #print 'class list:'
+        #print class_list
+
         result = []
         set_all = set(range(self.sensor_count))
         for i in range(self.class_count):
