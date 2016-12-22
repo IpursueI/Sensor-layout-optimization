@@ -2,6 +2,7 @@
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import platform
 import csv
 
 class DrawAveragePearson:
@@ -51,8 +52,12 @@ class DrawAveragePearson:
         ax.get_xaxis().tick_bottom()
         ax.get_yaxis().tick_left()
 
-        
-        zhfont = mpl.font_manager.FontProperties(fname='C:/Windows/Fonts/simhei.ttf')
+
+        sys_str = platform.system()
+        if sys_str == 'Darwin':
+            zhfont = mpl.font_manager.FontProperties(fname='/System/Library/Fonts/PingFang.ttc')
+        elif sys_str == 'Windows':
+            zhfont = mpl.font_manager.FontProperties(fname='C:/Windows/Fonts/simhei.ttf')        
         plt.xlabel(u'插值方法或者模型类型', fontproperties = zhfont, fontsize = 15)
         plt.ylabel(u'pearson相关系数均值', fontproperties = zhfont, fontsize = 15)
 

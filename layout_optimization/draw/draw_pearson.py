@@ -2,6 +2,7 @@
 
 import matplotlib.pyplot as plt
 import matplotlib as mpl
+import platform
 import csv
 
 class DrawPearson:
@@ -40,7 +41,7 @@ class DrawPearson:
 
         y_offsets = {'idw_temp':0.5, 'kriging_spherical_temp':0.3, 'kriging_linear_temp':0.5,
                         'kriging_power_temp':0.6, 'kriging_gaussian_temp':0.5, 'kriging_exponential_temp':0.4,
-                        'idw_hum':0.5, 'kriging_spherical_hum':0.4, 'kriging_linear_hum':0.6,
+                        'idw_hum':0.5, 'kriging_spherical_hum':0.4, 'kriging_linear_hum':0.35,
                         'kriging_power_hum':0.5, 'kriging_gaussian_hum':0.5, 'kriging_exponential_hum':0.55}
 
         file_data = self.get_data(temp_hum)
@@ -56,8 +57,11 @@ class DrawPearson:
         ax.get_xaxis().tick_bottom()
         ax.get_yaxis().tick_left()
 
-        
-        zhfont = mpl.font_manager.FontProperties(fname='C:/Windows/Fonts/simhei.ttf')
+        sys_str = platform.system()
+        if sys_str == 'Darwin':
+            zhfont = mpl.font_manager.FontProperties(fname='/System/Library/Fonts/PingFang.ttc')
+        elif sys_str == 'Windows':
+            zhfont = mpl.font_manager.FontProperties(fname='C:/Windows/Fonts/simhei.ttf')
         plt.xlabel(u'交叉验证实验编号', fontproperties = zhfont, fontsize = 15)
         plt.ylabel(u'pearson相关系数', fontproperties = zhfont, fontsize = 15)
 
