@@ -12,12 +12,13 @@ __doc__ = '''用于普通kriging的计算'''
 
 class OrdinaryKriging:
 
-    def __init__(self, filtered_file_path, pos_file_path, selected_sensors, unselected_sensors, each_sensor_number, variogram_model='spherical'):
+    def __init__(self, filtered_file_path, pos_file_path, selected_sensors, unselected_sensors, each_sensor_number, start_pos = 0, variogram_model='spherical'):
         self.filtered_file_path = filtered_file_path
         self.pos_file_path = pos_file_path
         self.selected_sensors = selected_sensors
         self.unselected_sensors = unselected_sensors
         self.each_sensor_number = each_sensor_number
+        self.start_pos = start_pos
         self.variogram_model = variogram_model
 
     def get_calculate_data(self):
@@ -35,7 +36,7 @@ class OrdinaryKriging:
         [[x1,y1,z1],[x2,y2,z2]]
         """
         read_data = ReadData(self.filtered_file_path, self.pos_file_path)
-        self.temperature_humidity_data = read_data.get_temperature_humidity_data(self.each_sensor_number)
+        self.temperature_humidity_data = read_data.get_temperature_humidity_data(self.each_sensor_number, self.start_pos)
         self.pos_data = read_data.get_pos_data()
 
         calculate_data = []

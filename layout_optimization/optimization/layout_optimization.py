@@ -1,9 +1,10 @@
 #-*- coding:utf-8 -*-
 
-from __future__ import print_function
+#from __future__ import print_function
 import math
 import random
 from simanneal import Annealer
+import csv
 import sys
 sys.path.append("..")
 from pick_tactics.tactics import PickTactics
@@ -33,7 +34,7 @@ class LayoutOptimization(Annealer):
         b = random.choice(unselected)
         self.state.remove(a)
         self.state.append(b)
-        #print("state: ",self.state)
+        print("state: ",self.state)
 
     def energy(self):
         tac = PickTactics()
@@ -42,25 +43,46 @@ class LayoutOptimization(Annealer):
         rmse = RMSE(ok3d.run())
         #print(self.state)
         #return rmse.temperature_error()
-        return rmse.humidity_error()
+        return rmse.temperature_error() + rmse.humidity_error()
 
 
 if __name__ == '__main__':
-    #state = random.sample(range(34), 6)
-    state = [1,2,3,4,5]
-    lay_opt = LayoutOptimization(state, 34, "../data/filter_data","../data/pos/pos.csv", 10)
-    lay_opt.copy_strategy = "slice"
-    lay_opt.steps = 10000
-    lay_opt.updates = 1000
-    state, e = lay_opt.anneal()
-    state = sorted(state)
-    print("root_mean_square_error: %f" % e)
-    print("final state: ", state)
-    print("-----end-----")
-    sensors = [lay_opt.sensor_num[item] for item in state]
-    sensors.append(str(e))
-    print("sensors:", sensors)
+    # state = random.sample(range(34), 2)
+    # lay_opt = LayoutOptimization(state, 34, "../data/filter_data","../data/pos/pos.csv", 10)
+    # lay_opt.copy_strategy = "slice"
+    # lay_opt.steps = 10
+    # lay_opt.updates = 10
+    # state, e = lay_opt.anneal()
+    # state = sorted(state)
+    # print("root_mean_square_error: %f" % e)
+    # print("final state: ", state)
+    # print("-----end-----")
+    # sensors = [lay_opt.sensor_num[item] for item in state]
+    # sensors.append(str(e))
+    # print("sensors:", sensors)
 
-    #对传感器的布局进行绘制
-    drawer = drawLayout('../data/pos/pos.csv','../draw/sensor.png',sensors)
-    drawer.main()
+    # #对传感器的布局进行绘制
+    # drawer = drawLayout('../data/pos/pos.csv','../draw/sensor.png',sensors)
+    # drawer.main()
+
+    res = []
+    for i in range(3):
+        state = random.sample(range(34), 15+i*5)
+        lay_opt = LayoutOptimization(state, 34, "../data/filter_data","../data/pos/pos.csv", 10)
+        lay_opt.copy_strategy = "slice"
+        lay_opt.steps = 10000
+        lay_opt.updates = 100
+        state, e = lay_opt.anneal()
+        state = sorted(state)
+        print("root_mean_square_error: %f" % e)
+        print("final state: ", state)
+        print("-----end-----")
+        sensors = [lay_opt.sensor_num[item] for item in state]
+        sensors.append(str(e))
+        print("sensors:", sensors)
+        res.append(sensors)
+
+    csvfile = file('../data/result/layout_res.csv','wb')
+    writer = csv.writer(csvfile)
+    writer.writerows(res)
+    csvfile.close()

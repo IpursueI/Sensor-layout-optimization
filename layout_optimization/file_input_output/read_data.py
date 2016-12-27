@@ -35,7 +35,7 @@ class ReadData:
                     dis_data[row[0]] = value
             return dis_data
 
-    def get_temperature_humidity_data(self, number):
+    def get_temperature_humidity_data(self, number, start_pos=0):
         temperature_humidity_data = {}
         file_list = self.get_file_names()
         for file_name in file_list:
@@ -44,7 +44,7 @@ class ReadData:
             reader = csv.reader(csv_file)
             file_data = [line for line in reader]
             sensor_number = file_name[file_name.find('-')+1 : file_name.find('.')]
-            temperature_humidity_data[sensor_number] = file_data[:number]
+            temperature_humidity_data[sensor_number] = file_data[start_pos:start_pos+number]
 
         return temperature_humidity_data
 

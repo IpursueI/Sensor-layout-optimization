@@ -170,12 +170,13 @@ class drawLayout:
         textRectObj.center = (330, 150)
         self.screen.blit(textSurfaceObj, textRectObj)
 
-        startX = 250
+        startX = 50
+        fontObj2 = pygame.font.Font('freesansbold.ttf', 15)
         for item in self.layoutData[:-1]:
-            textSurfaceObj = fontObj1.render(item, True, self.WHITE)
+            textSurfaceObj = fontObj2.render(item, True, self.WHITE)
             textRectObj = textSurfaceObj.get_rect()
-            textRectObj.center = (startX, 750)
-            startX += 170
+            textRectObj.center = (startX, 720)
+            startX += 100
             self.screen.blit(textSurfaceObj, textRectObj)
 
 
