@@ -60,6 +60,7 @@ class DrawBarChart:
 
         plt.xlabel(u'交叉验证实验编号', fontproperties = zhfont, fontsize = 15)
         plt.ylabel(ylabels[error_type], fontproperties = zhfont, fontsize = 15)
+        ax.set_xticks(ind+width*2.5)
         ax.set_xticklabels((u'实验1', u'实验2', u'实验3', u'实验4', u'实验5',u'实验6', u'实验7'), fontproperties = zhfont, fontsize = 15)
 
         plt.title(titles[temp_hum][error_type], fontproperties = zhfont, fontsize = 15)

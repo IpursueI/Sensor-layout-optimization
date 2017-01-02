@@ -40,8 +40,8 @@ class DrawMeanBarChart:
         fig, ax = plt.subplots(1, 1)
 
         ind = np.arange(5)
-        width = 0.3
-        rect = ax.bar(ind, file_data, width=0.6 ,color = color_sequence[0])
+        width = 0.6
+        rect = ax.bar(ind, file_data, width ,color = color_sequence[0])
 
         sys_str = platform.system()
         if sys_str == 'Darwin':
@@ -51,6 +51,7 @@ class DrawMeanBarChart:
 
         plt.xlabel(u'插值或者模型类型', fontproperties = zhfont, fontsize = 15)
         plt.ylabel(ylabels[error_type], fontproperties = zhfont, fontsize = 15)
+        ax.set_xticks(ind+width/2)
         ax.set_xticklabels(majors)
 
         plt.title(titles[temp_hum][error_type], fontproperties = zhfont, fontsize = 15)
