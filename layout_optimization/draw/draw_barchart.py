@@ -7,14 +7,14 @@ import csv
 import numpy as np
 
 class DrawBarChart:
-    def get_data(self, data_file_path, temp_hum):  #temp_hum=0时代表温度，1代表湿度
+    def get_data(self, data_file_path, temp_hum, start,end):  #temp_hum=0时代表温度，1代表湿度
         file_data = []
         with open(data_file_path) as f:
             f_csv = csv.reader(f)
-            for index,row in enumerate(f_csv):
-                if index != 0 and index != 8 and index != 9:
-                    row = [float(item) for item in row]
-                    file_data.append(row)
+            data = [item for item in f_csv]
+            for row in data[start:end]:
+                row = [float(item) for item in row]
+                file_data.append(row)
 
         column = range(10)[temp_hum::2]
         res = []
@@ -28,7 +28,7 @@ class DrawBarChart:
         return res
 
 
-    def draw(self, data_file_path, temp_hum, error_type):
+    def draw(self, start, end, data_file_path, temp_hum, error_type):
         titles = [[u'温度插值平均误差',u'温度插值均方根误差',u'温度插值pearson相关系数'], [u'湿度插值平均误差',u'湿度插值均方根误差', u'湿度插值pearson相关系数']]
         
         ylabels = [u'平均误差',u'均方根误差',u'Pearson相关系数']
@@ -39,13 +39,13 @@ class DrawBarChart:
         majors = ['idw','kriging_spherical','kriging_linear',
                     'kriging_power','kriging_exponential']
 
-        file_data = self.get_data(data_file_path, temp_hum)
+        file_data = self.get_data(data_file_path, temp_hum, start,end)
         #print file_data
         color_sequence = ['#1f77b4', '#aec7e8', '#ff7f0e', '#ffbb78', '#2ca02c']
         plt.style.use('ggplot')
         fig, ax = plt.subplots(1, 1)
 
-        ind = np.arange(7)
+        ind = np.arange(end-start)
         width = 0.15
         rects = []
         for i in range(5):
@@ -58,10 +58,11 @@ class DrawBarChart:
         elif sys_str == 'Windows':
             zhfont = mpl.font_manager.FontProperties(fname='C:/Windows/Fonts/simhei.ttf')
 
-        plt.xlabel(u'交叉验证实验编号', fontproperties = zhfont, fontsize = 15)
+        plt.xlabel(u'传感器布局编号', fontproperties = zhfont, fontsize = 15)
         plt.ylabel(ylabels[error_type], fontproperties = zhfont, fontsize = 15)
         ax.set_xticks(ind+width*2.5)
-        ax.set_xticklabels((u'实验1', u'实验2', u'实验3', u'实验4', u'实验5',u'实验6', u'实验7'), fontproperties = zhfont, fontsize = 15)
+        #ax.set_xticklabels((u'实验1', u'实验2', u'实验3', u'实验4', u'实验5',u'实验6', u'实验7'), fontproperties = zhfont, fontsize = 15)
+        ax.set_xticklabels([start+item for item in range(end-start)])
 
         plt.title(titles[temp_hum][error_type], fontproperties = zhfont, fontsize = 15)
 
@@ -79,6 +80,11 @@ if __name__ == '__main__':
     
     result_file_path = []
 
-    for i in range(2):
-        for j in range(3):
-            dbc.draw(files[j], i, j)
+    # for i in range(2):
+    #     #for j in range(3):
+    #     dbc.draw(1,11,files[1], i, 1)
+
+    #dbc.draw(1,11,files[1], 0, 1)    #前十组数据 温度 均方根误差
+    #dbc.draw(11,21,files[1], 0, 1)   #后十组数据
+    #dbc.draw(1,11,files[1], 1, 1)
+    dbc.draw(11,21,files[1], 1, 1)

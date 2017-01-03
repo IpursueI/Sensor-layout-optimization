@@ -48,7 +48,7 @@ class LayoutOptimization(Annealer):
         pos = [0]
         start = 0
         for item in unselected:
-            start += self.sensor_weight[item]
+            start += self.sensor_weight[self.sensor_num[item]]
             pos.append(start)
 
         res = random.choice(range(1,start+1))
@@ -59,13 +59,20 @@ class LayoutOptimization(Annealer):
                 break
         return unselected[final-1]
 
-    def move(self):
+    def move(self):    #根据权重进行状态转移
         a = random.choice(self.state)
         unselected = list(set(range(self.total_number)).difference(set(self.state)))
         b = self.weight_select(unselected)
         self.state.remove(a)
         self.state.append(b)
         #print("state: ",self.state)
+
+    def move2(self):   #随机进行状态转移
+        a = random.choice(self.state)
+        unselected = list(set(range(self.total_number)).difference(set(self.state)))
+        b = random.choice(unselected)
+        self.state.remove(a)
+        self.state.append(b)
 
     def energy(self):
         tac = PickTactics()
@@ -75,8 +82,8 @@ class LayoutOptimization(Annealer):
         #print(self.state)
 
         res = rmse.temperature_error() + rmse.humidity_error()
-        if res <= self.goal:
-            super(LayoutOptimization, self).set_user_exit(0,0)
+        # if res <= self.goal:
+        #     super(LayoutOptimization, self).set_user_exit(0,0)
         return res
 
 
@@ -125,14 +132,17 @@ if __name__ == '__main__':
 
     state = random.sample(range(34), 4)
     lay_opt = LayoutOptimization(state, 34, "../data/filter_data","../data/pos/pos.csv", 10, 2.46)
-    # lay_opt.copy_strategy = "slice"
-    # lay_opt.steps = 1000
-    # lay_opt.updates = 1000
-    # state, e = lay_opt.anneal()
-    # state = sorted(state)
-    # print("root_mean_square_error: %f" % e)
-    # print("final state: ", state)
-    # print("-----end-----")
+    lay_opt.set_sensor_weight()
+    lay_opt.copy_strategy = "slice"
+    lay_opt.save_state_on_exit = False
+    lay_opt.steps = 100
+    lay_opt.updates = 100
+    state, e = lay_opt.anneal()
+    state = sorted(state)
+    print("root_mean_square_error: %f" % e)
+    print("final state: ", state)
+    print lay_opt.get_energy_record()
+    print("-----end-----")
     # sensors = [lay_opt.sensor_num[item] for item in state]
     # sensors.append(str(e))
     # print("sensors:", sensors)
@@ -142,16 +152,3 @@ if __name__ == '__main__':
     # writer = csv.writer(csvfile)
     # writer.writerows(res)
     # csvfile.close()
-
-
-    lay_opt.set_sensor_weight()
-
-    cout = 0
-    total = 1000
-    for i in range(total):
-        res = lay_opt.weight_select(['10728412','10728515'])
-        if res == '10728412':
-            cout+=1
-
-    print cout
-    print total-cout

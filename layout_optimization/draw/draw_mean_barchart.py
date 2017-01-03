@@ -11,9 +11,8 @@ class DrawMeanBarChart:
         file_data = []
         with open(data_file_path) as f:
             f_csv = csv.reader(f)
-            for index,row in enumerate(f_csv):
-                if index == 9:
-                    file_data = [float(item) for item in row]
+            data = [item for item in f_csv]
+            file_data = [float(item) for item in data[-1]]
         if temp_hum == 0:
             file_data = file_data[::2]
         elif temp_hum == 1:
@@ -57,8 +56,8 @@ class DrawMeanBarChart:
         plt.title(titles[temp_hum][error_type], fontproperties = zhfont, fontsize = 15)
 
         
-        plt.savefig(result_file_path[temp_hum][error_type])
-        #plt.show()
+        #plt.savefig(result_file_path[temp_hum][error_type])
+        plt.show()
         
 
 
@@ -67,7 +66,7 @@ if __name__ == '__main__':
     files = ["../data/result/MeanError.csv", "../data/result/RMSE.csv", "../data/result/Pearson.csv"]
 
     for i in range(2):
-        for j in range(3):
-            dbc.draw(files[j], i, j)
+        #for j in range(3):
+        dbc.draw(files[1], i, 1)
 
     #dbc.draw(files[0], 0, 0)

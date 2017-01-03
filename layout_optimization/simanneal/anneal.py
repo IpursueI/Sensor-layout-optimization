@@ -43,6 +43,8 @@ class Annealer(object):
     save_state_on_exit = True
 
     def __init__(self, initial_state=None, load_state=None):
+        self.energy_record = []  #add by hpj
+
         if len(initial_state) > 0:
             self.state = self.copy_state(initial_state)
         elif load_state:
@@ -141,6 +143,8 @@ class Annealer(object):
         Returns
         (state, energy): the best state and energy found.
         """
+        
+
         step = 0
         self.start = time.time()
 
@@ -168,6 +172,9 @@ class Annealer(object):
             T = self.Tmax * math.exp(Tfactor * step / self.steps)
             self.move()
             E = self.energy()
+
+            self.energy_record.append(E)  #add by hpj
+
             dE = E - prevEnergy
             trials += 1
             if dE > 0.0 and math.exp(-dE / T) < random.random():
@@ -276,3 +283,6 @@ class Annealer(object):
         print('') # New line after auto() output
         # Don't perform anneal, just return params
         return {'tmax': Tmax, 'tmin': Tmin, 'steps': duration}
+
+    def get_energy_record(self):
+        return self.energy_record
