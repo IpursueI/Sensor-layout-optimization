@@ -1,6 +1,7 @@
 #-*- coding:utf-8 -*-
 import math
 import random
+import copy
 import sys
 import csv
 sys.path.append("..")
@@ -21,7 +22,33 @@ class LayoutValidation:
         self.dis_file_path = dis_file_path
 
     def generate(self):
-        #现将最优布局添加进去，然后再随机挑选若干组传感器布局
+        #将八个传感器的最优布局中的传感器点，任取一个和其余26个点中的一个进行互换，这样会生成8*26个布局，进行比较
+        res = []
+        tmp = []
+        selected_list = self.layout
+        unselected_list = [item for item in self.sensor_num if item not in selected_list]
+        tmp.append(selected_list)
+        tmp.append(unselected_list)
+        res.append(tmp)
+
+        for i in selected_list:
+            for j in unselected_list:
+                tmp = []
+                t_selected_list = copy.deepcopy(selected_list)
+                t_unselectec_list = copy.deepcopy(unselected_list)
+                t_selected_list.remove(i)
+                t_selected_list.append(j)
+                t_unselectec_list.remove(j)
+                t_unselectec_list.append(i)
+                tmp.append(t_selected_list)
+                tmp.append(t_unselectec_list)
+
+                res.append(tmp)
+        return res
+
+
+    def random_generate(self):
+        #随机生成8个传感器的布局
         res = []
         tmp = []
         selected_list = self.layout
@@ -42,7 +69,6 @@ class LayoutValidation:
 
                 res.append(tmp)
         return res
-
 
     def accuracy_calculate(self, ok3d_linear_res):
         error_ok3d_linear = RMSE(ok3d_linear_res)

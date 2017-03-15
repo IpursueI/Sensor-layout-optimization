@@ -35,20 +35,47 @@ from draw.draw_mean_barchart import DrawMeanBarChart
 # draw_average_pearson.draw(0)
 # draw_average_pearson.draw(1)
 
-dbc = DrawBarChart()
-files = ["../data/result/MeanError.csv", "../data/result/RMSE.csv", "../data/result/Pearson.csv"]
+# dbc = DrawBarChart()
+# files = ["../data/result/MeanError.csv", "../data/result/RMSE.csv", "../data/result/Pearson.csv"]
 
-result_file_path = []
+# result_file_path = []
 
-for i in range(2):
-    for j in range(3):
-        dbc.draw(files[j], i, j)
+# for i in range(2):
+#     for j in range(3):
+#         dbc.draw(files[j], i, j)
 
 
-dmbc = DrawMeanBarChart()
+# dmbc = DrawMeanBarChart()
 
-for i in range(2):
-    for j in range(3):
-        dmbc.draw(files[j], i, j)
+# for i in range(2):
+#     for j in range(3):
+#         dmbc.draw(files[j], i, j)
 
-print "done"
+# print "done"
+
+
+import numpy as np
+import matplotlib.mlab as mlab
+import matplotlib.pyplot as plt
+
+
+# example data
+mu = 100  # mean of distribution
+sigma = 15  # standard deviation of distribution
+x = mu + sigma * np.random.randn(10000)
+print x
+
+num_bins = 10
+# the histogram of the data
+x= range(10)
+n, bins, patches = plt.hist(x, num_bins, normed=1)
+# add a 'best fit' line
+# y = mlab.normpdf(bins, mu, sigma)
+# plt.plot(bins, y, 'r--')
+plt.xlabel('Smarts')
+plt.ylabel('Probability')
+plt.title(r'Histogram of IQ: $\mu=100$, $\sigma=15$')
+
+# Tweak spacing to prevent clipping of ylabel
+plt.subplots_adjust(left=0.15)
+plt.show()

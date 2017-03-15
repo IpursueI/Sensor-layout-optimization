@@ -27,7 +27,7 @@ class DrawDifferentLayout:
     def draw(self):
         title = u'不同传感器个数最优布局均方根误差'
 
-        majors = [u'三个',u'四个',u'五个',u'六个',u'七个',u'八个',u'九个',u'十个',u'十一个',u'十二个']
+        majors = ['3','4','5','6','7','8','9','10','11','12']
 
 
         file_data = self.get_data()
@@ -49,7 +49,7 @@ class DrawDifferentLayout:
         ax.set_xticks(range(len(majors)))
         ax.set_xticklabels(majors, fontproperties = zhfont, fontsize = 15)
 
-        res_data = [item[-1] for item in file_data]
+        res_data = [item[-1] for item in file_data][:len(majors)]
 
         line = plt.plot(range(len(majors)), res_data,lw=2.5,color=color_sequence[0])
 
@@ -67,5 +67,5 @@ class DrawDifferentLayout:
 
 if __name__ == '__main__':
     draw_different_layout = DrawDifferentLayout("../data/result/layout_res_backup.csv")
-    #draw_different_layout.draw()
-    draw_different_layout.draw_layout(9)
+    draw_different_layout.draw()
+    #draw_different_layout.draw_layout(9)

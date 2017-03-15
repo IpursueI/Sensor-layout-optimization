@@ -105,24 +105,26 @@ if __name__ == '__main__':
 
     final_error = [2.69, 2.46, 1.97, 1.66, 1.49, 1.08, 1.08, 1.10, 1.03, 1.03]
     res = []
-    for i in range(10):
-        state = random.sample(range(34), 3+i)
+    # for i in range(10):
+    state = random.sample(range(34), 5)
 
-        for j in range(2):
+    for j in range(1):
 
-            lay_opt = LayoutOptimization(state, 34, "../data/filter_data","../data/pos/pos.csv", 10, final_error[i])
-            lay_opt.set_sensor_weight()      # 设置传感器权重
-            lay_opt.make_weight(j)
-            lay_opt.copy_strategy = "slice"
-            lay_opt.steps = 10000
-            lay_opt.updates = 100
-            
-            state, e = lay_opt.anneal()
-            energy_record =  lay_opt.get_energy_record()
-            res.append(energy_record)
-            print("-----end-----")
+        lay_opt = LayoutOptimization(state, 34, "../data/filter_data","../data/pos/pos.csv", 10, final_error[2])
+        lay_opt.set_sensor_weight()      # 设置传感器权重
+        lay_opt.make_weight(j+1)
+        lay_opt.copy_strategy = "slice"
+        lay_opt.steps = 10000
+        lay_opt.updates = 1000
+        lay_opt.save_state_on_exit = False
+        
+        state, e = lay_opt.anneal()
+        energy_record =  lay_opt.get_energy_record()
+        res.append(energy_record)
+        print res
+        print("-----end-----")
 
-    csvfile = file('../data/result/energy_record.csv','wb')
+    csvfile = file('../data/result/energy_record.csv','a')
     writer = csv.writer(csvfile)
     writer.writerows(res)
     csvfile.close()
